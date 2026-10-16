@@ -99,7 +99,7 @@ export interface Inquiry {
   phone: string;
   subject: string;
   message: string;
-  status: 'new' | 'read' | 'replied';
+  status: 'new' | 'read' | 'replied' | 'archived';
   createdAt: string;
 }
 

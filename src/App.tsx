@@ -190,6 +190,11 @@ export default function App() {
         isOpen={isConciergeOpen}
         onClose={() => setIsConciergeOpen(false)}
         hotel={hotel}
+        rooms={rooms}
+        onOpenBooking={(room) => {
+          setIsConciergeOpen(false);
+          handleOpenBooking(room);
+        }}
       />
     </div>
   );

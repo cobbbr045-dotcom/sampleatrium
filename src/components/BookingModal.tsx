@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, Users, Coffee, ShieldCheck, CheckCircle2, Phone, MessageCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { X, Calendar, Users, Coffee, ShieldCheck, CheckCircle2, Phone, MessageCircle, AlertCircle, Loader2, ArrowLeft } from 'lucide-react';
 import { RoomType, HotelInfo, Booking } from '../types/hotel.ts';
 import { SearchParams } from './BookingSearch.tsx';
 
@@ -131,30 +131,86 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     }
   };
 
-  const handleReset = () => {
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  // Safe close handler that protects booking progress
+  const isFormDirty = Boolean(guestName.trim() || guestEmail.trim() || guestPhone.trim() || specialRequests.trim());
+
+  const handleSafeClose = () => {
+    if (step === 2 && isFormDirty) {
+      const confirmDiscard = window.confirm("You have entered booking details. Are you sure you want to exit? Your entered details will be discarded.");
+      if (!confirmDiscard) return;
+    }
     setStep(1);
     setConfirmedBooking(null);
     onClose();
   };
 
+  // Escape key closes modal safely
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleSafeClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isFormDirty, step]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in overflow-y-auto">
-      <div className="bg-[#faf8f5] text-stone-900 w-full max-w-2xl rounded-2xl shadow-2xl border border-stone-300 overflow-hidden my-6">
-        {/* Header */}
-        <div className="bg-[#141b24] text-stone-100 p-5 sm:p-6 flex items-center justify-between border-b border-stone-800">
-          <div>
-            <span className="text-[10px] uppercase tracking-widest text-amber-400 font-bold block">
-              Hotel Atrium • Lakeside Pokhara
-            </span>
-            <h3 className="text-xl sm:text-2xl font-serif font-bold text-white">
-              {step === 3 ? 'Reservation Request Received' : 'Reserve Your Stay'}
-            </h3>
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Reserve Your Stay at Hotel Atrium"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in overflow-y-auto"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          handleSafeClose();
+        }
+      }}
+    >
+      <div className="bg-[#faf8f5] text-stone-900 w-full max-w-2xl rounded-2xl shadow-2xl border border-stone-300 overflow-hidden my-4 sm:my-6">
+        {/* Header with Prominent Back to Rooms & Close buttons */}
+        <div className="bg-[#141b24] text-stone-100 p-4 sm:p-5 flex items-center justify-between border-b border-stone-800">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleSafeClose}
+              className="px-2.5 py-1.5 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-stone-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer border border-stone-700 shadow-sm active:scale-95"
+              title="Return to room categories"
+              aria-label="Back to Rooms"
+            >
+              <ArrowLeft className="w-4 h-4 text-amber-400" />
+              <span className="hidden sm:inline">Back to Rooms</span>
+            </button>
+            <div>
+              <span className="text-[10px] uppercase tracking-widest text-amber-400 font-bold block">
+                Hotel Atrium • Lakeside Pokhara
+              </span>
+              <h3 className="text-lg sm:text-xl font-serif font-bold text-white">
+                {step === 3 ? 'Reservation Request Received' : 'Reserve Your Stay'}
+              </h3>
+            </div>
           </div>
           <button
-            onClick={handleReset}
-            className="text-stone-400 hover:text-white p-1 rounded-full hover:bg-stone-800 transition-colors"
+            type="button"
+            onClick={handleSafeClose}
+            className="text-stone-400 hover:text-white p-1.5 rounded-full hover:bg-stone-800 transition-colors cursor-pointer"
+            title="Close reservation (Esc)"
+            aria-label="Close reservation"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
 
@@ -520,8 +576,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               </div>
 
               <button
-                onClick={handleReset}
-                className="text-stone-500 hover:text-stone-800 text-xs underline pt-2 block mx-auto"
+                onClick={handleSafeClose}
+                className="text-stone-500 hover:text-stone-800 text-xs underline pt-2 block mx-auto cursor-pointer"
               >
                 Close &amp; Return to Website
               </button>

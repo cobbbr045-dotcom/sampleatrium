@@ -31,6 +31,30 @@ interface AdminDashboardProps {
   onRoomsUpdated: (updated: RoomType[]) => void;
 }
 
+const getStoredToken = (): string | null => {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('hotel_atrium_session_token') || sessionStorage.getItem('hotel_atrium_session_token');
+};
+
+const storeSessionToken = (token: string, remember: boolean) => {
+  if (typeof window === 'undefined') return;
+  if (remember) {
+    localStorage.setItem('hotel_atrium_session_token', token);
+    sessionStorage.removeItem('hotel_atrium_session_token');
+  } else {
+    sessionStorage.setItem('hotel_atrium_session_token', token);
+    localStorage.removeItem('hotel_atrium_session_token');
+  }
+  localStorage.removeItem('hotel_atrium_admin_session');
+};
+
+const clearSessionToken = () => {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem('hotel_atrium_session_token');
+  sessionStorage.removeItem('hotel_atrium_session_token');
+  localStorage.removeItem('hotel_atrium_admin_session');
+};
+
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   isOpen,
   onClose,
@@ -39,10 +63,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onHotelUpdated,
   onRoomsUpdated,
 }) => {
+  const [authToken, setAuthToken] = useState<string | null>(getStoredToken);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [pin, setPin] = useState<string>('');
+  const [rememberMe, setRememberMe] = useState<boolean>(true);
   const [authError, setAuthError] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'bookings' | 'rooms' | 'hotel' | 'inquiries'>('bookings');
+
+  // Owner PIN change state
+  const [currentPinInput, setCurrentPinInput] = useState<string>('');
+  const [newPinInput, setNewPinInput] = useState<string>('');
+  const [pinChangeMsg, setPinChangeMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [pinChangeLoading, setPinChangeLoading] = useState<boolean>(false);
 
   // Bookings state
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -82,13 +114,50 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setHotelForm(hotel);
   }, [hotel]);
 
+  const getAuthHeaders = () => ({
+    'Content-Type': 'application/json',
+    ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {}),
+  });
+
+  // Verify stored session token on open
+  useEffect(() => {
+    if (!isOpen) return;
+    const token = getStoredToken();
+    if (!token) {
+      setIsAuthenticated(false);
+      return;
+    }
+
+    fetch('/api/admin/verify-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.valid) {
+          setAuthToken(token);
+          setIsAuthenticated(true);
+        } else {
+          clearSessionToken();
+          setAuthToken(null);
+          setIsAuthenticated(false);
+        }
+      })
+      .catch(() => {
+        // Network failure
+      });
+  }, [isOpen]);
+
   // Load data once authenticated
   const fetchAdminData = async () => {
     setLoading(true);
     try {
       const [resBookings, resInquiries] = await Promise.all([
-        fetch('/api/bookings'),
-        fetch('/api/inquiries'),
+        fetch('/api/bookings', { headers: getAuthHeaders() }),
+        fetch('/api/inquiries', { headers: getAuthHeaders() }),
       ]);
       const dataBookings = await resBookings.json();
       const dataInquiries = await resInquiries.json();
@@ -102,10 +171,34 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && authToken) {
       fetchAdminData();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, authToken]);
+
+  // Lock body scroll while admin dashboard is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  // Escape key closes modal
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -120,15 +213,61 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         body: JSON.stringify({ pin }),
       });
       const data = await res.json();
-      if (data.success) {
+      if (data.success && data.token) {
+        storeSessionToken(data.token, rememberMe);
+        setAuthToken(data.token);
         setIsAuthenticated(true);
+        setPin('');
       } else {
-        setAuthError(data.error || 'Invalid passcode.');
+        setAuthError(data.error || 'Invalid credentials. Please try again.');
       }
     } catch {
       setAuthError('Connection error. Please try again.');
     }
   };
+
+  const handleLogout = async () => {
+    if (authToken) {
+      try {
+        await fetch('/api/admin/logout', {
+          method: 'POST',
+          headers: getAuthHeaders(),
+        });
+      } catch {
+        // ignore logout failure
+      }
+    }
+    clearSessionToken();
+    setAuthToken(null);
+    setIsAuthenticated(false);
+    setPin('');
+  };
+
+  const handleChangePin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPinChangeMsg(null);
+    setPinChangeLoading(true);
+    try {
+      const res = await fetch('/api/admin/change-pin', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ currentPin: currentPinInput, newPin: newPinInput }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setPinChangeMsg({ type: 'success', text: data.message || 'Owner PIN successfully updated!' });
+        setCurrentPinInput('');
+        setNewPinInput('');
+      } else {
+        setPinChangeMsg({ type: 'error', text: data.error || 'Failed to update PIN.' });
+      }
+    } catch {
+      setPinChangeMsg({ type: 'error', text: 'Network connection error.' });
+    } finally {
+      setPinChangeLoading(false);
+    }
+  };
+
 
   // Change booking status
   const handleUpdateBookingStatus = async (id: string, newStatus: BookingStatus) => {
@@ -242,12 +381,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           </div>
 
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition-colors"
-          >
-            <X className="w-6 h-6" />
-          </button>
+          <div className="flex items-center gap-2">
+            {isAuthenticated && (
+              <button
+                onClick={handleLogout}
+                className="px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white text-xs font-medium transition-colors cursor-pointer"
+              >
+                Log Out
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition-colors cursor-pointer"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </div>
 
         {/* Not Logged In View */}
@@ -270,12 +419,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               <input
                 type="password"
-                placeholder="Enter PIN (Default: atrium2026)"
+                placeholder="Enter your secure access PIN"
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
                 required
                 className="w-full bg-[#0f141a] border border-stone-700 rounded-xl p-3 text-center text-stone-100 text-sm tracking-widest focus:outline-none focus:border-amber-400"
               />
+
+              <div className="flex items-center justify-center gap-2 text-xs text-stone-400 py-1">
+                <input
+                  type="checkbox"
+                  id="rememberPin"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="rounded border-stone-700 bg-stone-900 text-amber-500 focus:ring-0 cursor-pointer"
+                />
+                <label htmlFor="rememberPin" className="cursor-pointer select-none">
+                  Remember on this browser
+                </label>
+              </div>
 
               <button
                 type="submit"
@@ -799,13 +961,81 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       className="w-full bg-[#141b24] border border-stone-700 rounded p-2 text-stone-100 resize-none"
                     />
                   </div>
+
+                  {/* Security & PIN Settings */}
+                  <div className="pt-6 border-t border-stone-800">
+                    <h5 className="font-serif font-bold text-sm text-white mb-1 flex items-center gap-2">
+                      <Lock className="w-4 h-4 text-amber-400" />
+                      <span>Owner Portal Access PIN</span>
+                    </h5>
+                    <p className="text-xs text-stone-400 mb-3">
+                      Update the administrative PIN used to secure this management dashboard.
+                    </p>
+
+                    <div className="bg-[#141b24] p-4 rounded-xl border border-stone-700/60 max-w-lg space-y-3">
+                      {pinChangeMsg && (
+                        <div
+                          className={`p-2.5 rounded-lg text-xs ${
+                            pinChangeMsg.type === 'success'
+                              ? 'bg-emerald-950 border border-emerald-500 text-emerald-200'
+                              : 'bg-red-950 border border-red-500 text-red-200'
+                          }`}
+                        >
+                          {pinChangeMsg.text}
+                        </div>
+                      )}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div>
+                          <label className="text-stone-300 block mb-1">Current PIN</label>
+                          <input
+                            type="password"
+                            placeholder="Current PIN"
+                            value={currentPinInput}
+                            onChange={(e) => setCurrentPinInput(e.target.value)}
+                            className="w-full bg-[#0f141a] border border-stone-700 rounded p-2 text-stone-100"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-stone-300 block mb-1">New PIN</label>
+                          <input
+                            type="password"
+                            placeholder="New PIN (min 4 chars)"
+                            value={newPinInput}
+                            onChange={(e) => setNewPinInput(e.target.value)}
+                            className="w-full bg-[#0f141a] border border-stone-700 rounded p-2 text-stone-100"
+                          />
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleChangePin}
+                        disabled={pinChangeLoading || !currentPinInput || !newPinInput}
+                        className="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold text-xs uppercase tracking-wider transition-colors disabled:opacity-50 cursor-pointer"
+                      >
+                        {pinChangeLoading ? 'Updating PIN...' : 'Update Owner PIN'}
+                      </button>
+                    </div>
+                  </div>
                 </form>
               )}
 
               {/* TAB 4: INQUIRIES */}
               {activeTab === 'inquiries' && (
                 <div className="space-y-4">
-                  <h4 className="font-serif font-bold text-lg text-white">Guest Contact Inquiries</h4>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-serif font-bold text-lg text-white">Guest Contact Inquiries</h4>
+                      <p className="text-xs text-stone-400">Incoming messages from the website contact and booking assistance forms.</p>
+                    </div>
+                    <button
+                      onClick={fetchAdminData}
+                      className="px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-300 text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" />
+                      <span>Refresh</span>
+                    </button>
+                  </div>
+
                   {inquiries.length === 0 ? (
                     <div className="text-center py-12 text-stone-500 text-sm bg-[#1e2733] rounded-xl border border-stone-800">
                       No customer inquiries received yet.
@@ -813,16 +1043,73 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   ) : (
                     inquiries.map(inq => (
                       <div key={inq.id} className="bg-[#1e2733] p-5 rounded-xl border border-stone-800 space-y-3 text-xs">
-                        <div className="flex justify-between items-start">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                           <div>
                             <strong className="text-white text-sm">{inq.name}</strong>
-                            <div className="text-stone-400 mt-0.5">
-                              {inq.email} • {inq.phone || 'No phone provided'}
+                            <div className="text-stone-400 mt-0.5 flex flex-wrap gap-2 text-[11px]">
+                              <span>{inq.email}</span>
+                              {inq.phone && <span>• {inq.phone}</span>}
+                              <span>• {new Date(inq.createdAt).toLocaleDateString()}</span>
                             </div>
                           </div>
-                          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-500/30">
-                            {inq.status}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border ${
+                                inq.status === 'replied'
+                                  ? 'bg-emerald-950 text-emerald-300 border-emerald-500/30'
+                                  : inq.status === 'archived'
+                                  ? 'bg-stone-800 text-stone-400 border-stone-700'
+                                  : 'bg-amber-950 text-amber-300 border-amber-500/30'
+                              }`}
+                            >
+                              {inq.status}
+                            </span>
+                            <div className="flex items-center gap-1">
+                              {inq.status !== 'replied' && (
+                                <button
+                                  onClick={async () => {
+                                    try {
+                                      const res = await fetch(`/api/inquiries/${inq.id}/status`, {
+                                        method: 'PATCH',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ status: 'replied' }),
+                                      });
+                                      const data = await res.json();
+                                      if (data.success) {
+                                        setInquiries(prev => prev.map(i => i.id === inq.id ? data.data : i));
+                                      }
+                                    } catch (err) {
+                                      console.error(err);
+                                    }
+                                  }}
+                                  className="px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-emerald-300 text-[10px] transition-colors cursor-pointer"
+                                  title="Mark as Replied"
+                                >
+                                  Mark Replied
+                                </button>
+                              )}
+                              <a
+                                href={`mailto:${inq.email}?subject=RE: ${encodeURIComponent(inq.subject)} - Hotel Atrium Pokhara`}
+                                className="px-2 py-1 rounded bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 text-[10px] flex items-center gap-1 transition-colors"
+                              >
+                                <Mail className="w-3 h-3" />
+                                <span>Reply Email</span>
+                              </a>
+                              {inq.phone && (
+                                <a
+                                  href={`https://wa.me/${inq.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                                    `Namaste ${inq.name}! Thank you for contacting Hotel Atrium on Uday Marg, Lakeside Pokhara regarding "${inq.subject}".`
+                                  )}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="px-2 py-1 rounded bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 text-[10px] flex items-center gap-1 transition-colors"
+                                >
+                                  <MessageCircle className="w-3 h-3" />
+                                  <span>WhatsApp</span>
+                                </a>
+                              )}
+                            </div>
+                          </div>
                         </div>
                         <div className="font-semibold text-amber-300">{inq.subject}</div>
                         <p className="text-stone-300 leading-relaxed bg-[#141b24] p-3 rounded border border-stone-800">

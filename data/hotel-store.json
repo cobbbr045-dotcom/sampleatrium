@@ -220,6 +220,30 @@
   ],
   "bookings": [
     {
+      "id": "bkg-1792119039474",
+      "bookingReference": "ATR-2026-6914",
+      "roomId": "deluxe-twin",
+      "roomName": "Deluxe Twin Room with Balcony",
+      "checkIn": "2026-10-17",
+      "checkOut": "2026-10-19",
+      "nights": 2,
+      "numRooms": 1,
+      "adults": 2,
+      "children": 0,
+      "guestName": "a",
+      "guestEmail": "ada@11",
+      "guestPhone": "dkl",
+      "includeBreakfast": true,
+      "specialRequests": "",
+      "roomRatePerNightNpr": 1750,
+      "subtotalNpr": 3500,
+      "breakfastTotalNpr": 2600,
+      "taxNpr": 793,
+      "totalNpr": 6893,
+      "status": "pending",
+      "createdAt": "2026-10-16T02:50:39.474Z"
+    },
+    {
       "id": "bkg-1792032985603",
       "bookingReference": "ATR-2026-7572",
       "roomId": "std-twin",
@@ -330,5 +354,6 @@
       "createdAt": "2026-10-13T11:45:00.000Z"
     }
   ],
-  "adminPin": "atrium2026"
+  "adminPinSalt": "4ef12d69859673eafea25c886149c705",
+  "adminPinHash": "c33e388296e19156b83b11aa3f146b6dd45dfed2a80e9a5292655861afbb0526be8898ff4dbee25389a61ecda24d28d8fc407df3c16bb782e540b30989e6dda0"
 }

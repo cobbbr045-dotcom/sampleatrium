@@ -34,6 +34,18 @@ export const GallerySection: React.FC<GallerySectionProps> = ({
     }
   };
 
+  // Keyboard navigation for lightbox
+  React.useEffect(() => {
+    if (lightboxIdx === null) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxIdx(null);
+      if (e.key === 'ArrowLeft') prevPhoto();
+      if (e.key === 'ArrowRight') nextPhoto();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxIdx, authenticPhotos.length]);
+
   return (
     <section id="gallery" className="py-24 bg-[#faf8f5] text-stone-900 scroll-mt-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">

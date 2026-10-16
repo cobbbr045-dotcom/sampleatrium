@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hotel Atrium Pokhara - Lakeside Luxury Hotel &amp; Suites, Nepal</title>
     <meta name="description" content="Experience peaceful Lakeside hospitality at Hotel Atrium, Uday Marg, Pokhara, Nepal. Deluxe mountain-view rooms, garden courtyard, restaurant, and direct booking." />
+
+    <!-- Prevent unhandled WebSocket connection rejections in proxied dev environments -->
+    <script>
+      window.addEventListener('unhandledrejection', function(e) {
+        if (e.reason && (
+          (typeof e.reason === 'string' && e.reason.includes('WebSocket')) ||
+          (e.reason.message && e.reason.message.includes('WebSocket'))
+        )) {
+          e.preventDefault();
+        }
+      });
+    </script>
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="hotel" />
