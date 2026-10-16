@@ -1,0 +1,334 @@
+{
+  "hotel": {
+    "name": "Hotel Atrium",
+    "tagline": "Serenity in the Heart of Lakeside Pokhara",
+    "address": "Uday Marg, Lakeside, Ward No. 6",
+    "city": "Pokhara",
+    "province": "Gandaki Province",
+    "postalCode": "33700",
+    "country": "Nepal",
+    "phonePrimary": "+977 61-457126",
+    "phoneSecondary": "+977 61-457136",
+    "whatsapp": "+977 985-6039498",
+    "email": "info@hotelatriumpokhara.com",
+    "receptionHours": "24 Hours (Front Desk always open)",
+    "checkInTime": "12:00 PM (Noon) – 12:00 AM",
+    "checkOutTime": "12:00 PM (Noon)",
+    "googleRating": 4,
+    "reviewCount": 84,
+    "googleMapsUrl": "https://maps.app.goo.gl/m2D4fEDZrGmS4qcY9",
+    "coordinates": {
+      "lat": 28.2135,
+      "lng": 83.9572
+    },
+    "heroHeading": "A Peaceful Oasis by Phewa Lake",
+    "heroSubheading": "Situated on tranquil Uday Marg just a 3-minute stroll from Phewa Lake, Hotel Atrium blends genuine Nepali hospitality with modern comfort, scenic rooftop Himalayan vistas, and lush courtyard gardens.",
+    "aboutStory": "Nestled in the vibrant yet peaceful enclave of Uday Marg in Lakeside Pokhara, Hotel Atrium has welcomed travelers, trekkers, and families from around the globe seeking comfort, tranquility, and warm Nepali hospitality.\n\nOur hotel is strategically located away from the immediate traffic noise of the main lakeside strip, yet within a short 3-minute walk to the pristine waters of Phewa Lake, the bustling lakeside promenade, waterfront cafes, and craft bazaars.\n\nGuests at Hotel Atrium enjoy bright, well-appointed guest rooms featuring private balconies, ensuite bathrooms with uninterrupted 24-hour hot showers, and high-speed Wi-Fi. Our garden courtyard and rooftop terrace provide the perfect retreat to sip freshly brewed Himalayan coffee while gazing upon the majestic peaks of the Annapurna range and Mount Machhapuchhre (Fishtail).\n\nWhether you are gearing up for the Annapurna Circuit, unwinding after a Himalayan trek, or exploring the cultural wonders of Pokhara, our dedicated 24-hour reception and travel desk are always on hand to ensure an unforgettable stay.",
+    "policies": {
+      "cancellation": "Free cancellation up to 48 hours before check-in. Cancellations within 48 hours or no-shows are subject to a 1-night charge.",
+      "pets": "Pets are not allowed on the hotel premises to ensure the comfort and safety of all guests.",
+      "smoking": "All indoor guest rooms and enclosed public areas are 100% smoke-free. Designated smoking zones are available in the open-air garden terrace.",
+      "children": "Children of all ages are welcome. Children under 6 stay free of charge when sharing existing bedding with parents.",
+      "paymentMethods": [
+        "Cash (NPR, USD, EUR, INR)",
+        "Visa & Mastercard (Standard bank terminal)",
+        "eSewa & Khalti QR Payments",
+        "FonePay Digital Transfer"
+      ]
+    },
+    "socials": {
+      "facebook": "https://www.facebook.com/hotelatriumpokhara",
+      "instagram": "https://www.instagram.com/hotelatriumpokhara",
+      "tripadvisor": "https://www.tripadvisor.com/Search?q=Hotel+Atrium+Pokhara"
+    },
+    "ota": {
+      "agodaPropertyId": "908532",
+      "agodaUrl": "https://www.agoda.com/accom/property?propertyId=908532&countryId=120&currencyCode=NPR",
+      "easeMyTripId": "EMTHOTEL-1349532",
+      "easeMyTripUrl": "https://www.easemytrip.com/hotel-new/details/?ecid=EMTHOTEL-1349532",
+      "bluePillowUrl": "https://www.bluepillow.com/search/628668a6f679d12a3a43aa08?currency=NPR"
+    }
+  },
+  "rooms": [
+    {
+      "id": "std-twin",
+      "name": "Standard Twin Room with Fan",
+      "tagline": "As featured on Agoda (ID: 908532) & EaseMyTrip — Budget comfort",
+      "description": "Our Standard Twin Room features two comfortable single beds with clean, fresh linens, an ensuite private bathroom with 24-hour hot solar shower, a work desk, ceiling fan, and large windows bringing in natural Nepali sunlight.",
+      "priceNpr": 1190,
+      "maxAdults": 2,
+      "maxChildren": 1,
+      "bedConfig": "2 Single Beds (36 x 75 in)",
+      "roomSizeSqM": 18,
+      "viewType": "Courtyard & Garden View",
+      "breakfastIncluded": false,
+      "breakfastPriceNpr": 650,
+      "cancellationPolicy": "Free cancellation up to 48 hours before arrival",
+      "amenities": [
+        "24-Hour Hot & Cold Water",
+        "Free High-Speed Wi-Fi",
+        "Private Ensuite Bathroom",
+        "Work Desk & Chair",
+        "Ceiling Fan / Ventilation",
+        "Daily Housekeeping",
+        "Complimentary Toiletries & Towels",
+        "Electric Power Outlets (Universal)"
+      ],
+      "photos": [
+        "/images/hotel/roon0.jpg"
+      ],
+      "totalInventory": 5,
+      "isActive": true
+    },
+    {
+      "id": "deluxe-double",
+      "name": "Deluxe Double Room with Balcony",
+      "tagline": "Our most popular room for couples and travelers",
+      "description": "Designed for relaxation, the Deluxe Double Room offers a spacious king/queen-sized bed, a private balcony facing the peaceful neighborhood or mountain silhouette, flat-screen cable TV, bedside reading lights, and an immaculate private bathroom.",
+      "priceNpr": 1750,
+      "maxAdults": 2,
+      "maxChildren": 1,
+      "bedConfig": "1 Large Double / King Bed",
+      "roomSizeSqM": 24,
+      "viewType": "Mountain & Neighborhood View",
+      "breakfastIncluded": false,
+      "breakfastPriceNpr": 650,
+      "cancellationPolicy": "Free cancellation up to 48 hours before arrival",
+      "amenities": [
+        "Private Balcony with Seating",
+        "24-Hour Hot Shower Guarantee",
+        "Free High-Speed Wi-Fi",
+        "Flat-Screen Cable TV",
+        "Air Conditioning / Climate Fan",
+        "Electric Tea & Coffee Kettle",
+        "In-room Wardrobe & Luggage Rack",
+        "Room Service Available",
+        "Complimentary Mineral Water"
+      ],
+      "photos": [
+        "/images/hotel/deluxe9.jpg"
+      ],
+      "totalInventory": 4,
+      "isActive": true
+    },
+    {
+      "id": "deluxe-twin",
+      "name": "Deluxe Twin Room with Balcony",
+      "tagline": "Spacious comfort with separate beds and private balcony",
+      "description": "Ideal for trekking partners or friends traveling together in Pokhara. Features two premium single beds with orthopaedic mattresses, private balcony, private bathroom with high-pressure hot water, cable television, and scenic hillside glimpses.",
+      "priceNpr": 1750,
+      "maxAdults": 2,
+      "maxChildren": 1,
+      "bedConfig": "2 Twin Single Beds",
+      "roomSizeSqM": 23,
+      "viewType": "Garden & Hillside View",
+      "breakfastIncluded": false,
+      "breakfastPriceNpr": 650,
+      "cancellationPolicy": "Free cancellation up to 48 hours before arrival",
+      "amenities": [
+        "Private Balcony",
+        "24-Hour Solar & Electric Hot Water",
+        "Free High-Speed Wi-Fi",
+        "Flat-Screen Cable TV",
+        "Work Desk & Sitting Armchairs",
+        "In-Room Safe Box",
+        "Wardrobe & Luggage Storage Area",
+        "Daily Linen Refresh"
+      ],
+      "photos": [
+        "/images/hotel/slideroom1.jpg"
+      ],
+      "totalInventory": 3,
+      "isActive": true
+    },
+    {
+      "id": "executive-suite",
+      "name": "Deluxe Himalayan View Suite",
+      "tagline": "Elevated comfort with panoramic Annapurna mountain vistas",
+      "description": "Our signature top-floor suite boasts uninterrupted panoramic views of Machhapuchhre (Fishtail) and the Annapurna range. Features a king bed plus an extra single bed, private living lounge area, private sun terrace, mini-refrigerator, and deluxe bathroom amenities.",
+      "priceNpr": 2900,
+      "maxAdults": 3,
+      "maxChildren": 2,
+      "bedConfig": "1 King Bed + 1 Single Bed",
+      "roomSizeSqM": 36,
+      "viewType": "Panoramic Annapurna Mountain View",
+      "breakfastIncluded": true,
+      "breakfastPriceNpr": 0,
+      "cancellationPolicy": "Free cancellation up to 48 hours before arrival",
+      "amenities": [
+        "Complimentary Gourmet Breakfast Included",
+        "Panoramic Himalayan Mountain View Balcony",
+        "Spacious Living / Lounge Seating Area",
+        "Air Conditioning (Heating & Cooling)",
+        "High-Pressure 24hr Hot Bath & Shower",
+        "Complimentary Mini-Bar Refreshments",
+        "Large 40-inch Smart LED TV",
+        "Tea/Coffee Maker with Premium Nepali Teas",
+        "Bathrobes, Slippers & Luxury Toiletries"
+      ],
+      "photos": [
+        "/images/hotel/slide.jpg",
+        "/images/hotel/deluxe9.jpg"
+      ],
+      "totalInventory": 1,
+      "isActive": true
+    }
+  ],
+  "gallery": [
+    {
+      "id": "gal-1",
+      "title": "Hotel Atrium Building & Courtyard Entrance",
+      "category": "exterior",
+      "url": "/images/hotel/hotel.jpg",
+      "caption": "The official multi-story property facade of Hotel Atrium on Uday Marg, Lakeside Pokhara."
+    },
+    {
+      "id": "gal-2",
+      "title": "Panoramic Hotel View & Surroundings",
+      "category": "surroundings",
+      "url": "/images/hotel/slide.jpg",
+      "caption": "Scenic panorama of Hotel Atrium and the surrounding Lakeside neighborhood."
+    },
+    {
+      "id": "gal-3",
+      "title": "Deluxe Guest Room",
+      "category": "rooms",
+      "url": "/images/hotel/deluxe9.jpg",
+      "caption": "Clean, comfortable Deluxe room at Hotel Atrium with wooden furnishings and natural daylight."
+    },
+    {
+      "id": "gal-4",
+      "title": "Guest Bed Setup & Fresh Linens",
+      "category": "rooms",
+      "url": "/images/hotel/slideroom1.jpg",
+      "caption": "Comfortable bed configuration prepared for restful sleep after trekking Annapurna."
+    },
+    {
+      "id": "gal-5",
+      "title": "Guestroom Interior & Work Area",
+      "category": "rooms",
+      "url": "/images/hotel/roon0.jpg",
+      "caption": "Well-ventilated guestroom with ensuite bathroom access and mirror desk."
+    },
+    {
+      "id": "gal-6",
+      "title": "Hotel Patio & Outdoor Sitting Area",
+      "category": "terrace",
+      "url": "/images/hotel/fba.jpg",
+      "caption": "Outdoor courtyard patio where guests can unwind with Himalayan tea or breakfast."
+    }
+  ],
+  "bookings": [
+    {
+      "id": "bkg-1792032985603",
+      "bookingReference": "ATR-2026-7572",
+      "roomId": "std-twin",
+      "roomName": "Standard Twin Room with Fan",
+      "checkIn": "2026-10-16",
+      "checkOut": "2026-10-18",
+      "nights": 2,
+      "numRooms": 1,
+      "adults": 1,
+      "children": 0,
+      "guestName": "Anuj Baral",
+      "guestEmail": "odjoijaidj@gmail.com",
+      "guestPhone": "9980707067",
+      "includeBreakfast": false,
+      "specialRequests": "ground floor",
+      "roomRatePerNightNpr": 1190,
+      "subtotalNpr": 2380,
+      "breakfastTotalNpr": 0,
+      "taxNpr": 309,
+      "totalNpr": 2689,
+      "status": "rejected",
+      "createdAt": "2026-10-15T02:56:25.603Z"
+    },
+    {
+      "id": "bkg-1792030888238",
+      "bookingReference": "ATR-2026-7349",
+      "roomId": "std-twin",
+      "roomName": "Standard Twin Room",
+      "checkIn": "2026-11-01",
+      "checkOut": "2026-11-04",
+      "nights": 3,
+      "numRooms": 1,
+      "adults": 2,
+      "children": 0,
+      "guestName": "Emily Watson",
+      "guestEmail": "emily.w@example.com",
+      "guestPhone": "+1 415 555 2671",
+      "includeBreakfast": true,
+      "specialRequests": "Ground floor room if possible",
+      "roomRatePerNightNpr": 2200,
+      "subtotalNpr": 6600,
+      "breakfastTotalNpr": 3900,
+      "taxNpr": 1365,
+      "totalNpr": 11865,
+      "status": "cancelled",
+      "createdAt": "2026-10-15T02:21:28.238Z"
+    },
+    {
+      "id": "bkg-101",
+      "bookingReference": "ATR-2026-4821",
+      "roomId": "deluxe-double",
+      "roomName": "Deluxe Double Room",
+      "checkIn": "2026-10-20",
+      "checkOut": "2026-10-23",
+      "nights": 3,
+      "numRooms": 1,
+      "adults": 2,
+      "children": 0,
+      "guestName": "Sarah Jenkins",
+      "guestEmail": "sarah.j@example.com",
+      "guestPhone": "+44 7700 900077",
+      "includeBreakfast": true,
+      "specialRequests": "Arriving around 2 PM by tourist bus from Kathmandu. Would appreciate a quiet room on the upper floor.",
+      "roomRatePerNightNpr": 3200,
+      "subtotalNpr": 9600,
+      "breakfastTotalNpr": 3900,
+      "taxNpr": 1755,
+      "totalNpr": 15255,
+      "status": "cancelled",
+      "adminNotes": "Upper floor room 302 assigned. Arranged bus park welcome.",
+      "createdAt": "2026-10-12T14:20:00.000Z"
+    },
+    {
+      "id": "bkg-102",
+      "bookingReference": "ATR-2026-5190",
+      "roomId": "std-twin",
+      "roomName": "Standard Twin Room",
+      "checkIn": "2026-10-25",
+      "checkOut": "2026-10-28",
+      "nights": 3,
+      "numRooms": 1,
+      "adults": 2,
+      "children": 0,
+      "guestName": "Arun Thapa",
+      "guestEmail": "arun.thapa@gmail.com",
+      "guestPhone": "+977 9841234567",
+      "includeBreakfast": false,
+      "specialRequests": "Need safe luggage storage during our 5-day trek to Poon Hill after check-out.",
+      "roomRatePerNightNpr": 2200,
+      "subtotalNpr": 6600,
+      "breakfastTotalNpr": 0,
+      "taxNpr": 858,
+      "totalNpr": 7458,
+      "status": "cancelled",
+      "adminNotes": "Complimentary luggage storage approved for trek duration.",
+      "createdAt": "2026-10-14T09:15:00.000Z"
+    }
+  ],
+  "inquiries": [
+    {
+      "id": "inq-1",
+      "name": "Markus Webber",
+      "email": "markus.w@outlook.de",
+      "phone": "+49 171 1234567",
+      "subject": "Airport Pickup & Annapurna Trek Permits",
+      "message": "Hello! We will land at Pokhara International Airport on Oct 28th. Can you arrange airport pickup for 2 persons, and do you assist with ACAP permits and TIMS cards?",
+      "status": "replied",
+      "createdAt": "2026-10-13T11:45:00.000Z"
+    }
+  ],
+  "adminPin": "atrium2026"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Hotel Atrium Pokhara - Lakeside Luxury Hotel & Suites",
+  "description": "Official website of Hotel Atrium located on Uday Marg, Lakeside Pokhara, Nepal. Verified rooms, real-time availability, direct booking, and Annapurna mountain views.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
